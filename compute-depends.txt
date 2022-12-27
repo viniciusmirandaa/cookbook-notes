@@ -1,0 +1,6 @@
+computed field doens't get stored on database, unless you set store=True, but, doing so, we have to set @api.depends on function signature, doing changes on real time.
+compute fields, by default are readonly = True.
+
+onchange api can changes fields on real time, but can't depends from another model's field.
+
+api.constrains only will be displayed on creation, not in real time.

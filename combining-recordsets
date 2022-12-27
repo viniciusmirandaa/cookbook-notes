@@ -1,0 +1,24 @@
+To merge two recordsets into one while preserving their order, use the following
+operation:
+
+result = r1 + r2
+
+
+
+To merge two recordsets into one while ensuring that there are no duplicates in the
+result, use the following operation:
+
+result = r1 | r2
+
+
+
+
+To find the records that are common to two recordsets, use the following operation:
+
+result = r1 & r2
+
+
+
+
+
+

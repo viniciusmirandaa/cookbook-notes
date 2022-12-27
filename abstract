@@ -1,0 +1,20 @@
+An abstract model is created by a class based on models.AbstractModel, instead of
+the usual models.Model. It has all the attributes and capabilities of regular models; the
+difference is that the ORM will not create an actual representation for it in the database.
+This means that it can't have any data stored in it. It only serves as a template for a reusable
+feature that is to be added to regular models.
+
+Our archive abstract model is quite simple. It just adds the active field and a method to
+toggle the value of the active flag, which we expect to be used later, via a button on the
+user interface.
+
+When a model class is defined with the _inherit attribute, it inherits the attribute
+methods of those classes, and the attribute methods that are defined in the current class
+add modifications to those inherited features.
+
+The mechanism at play here is the same as that of a regular model extension (as per
+the Adding features to a model using inheritance recipe). You may have noticed that
+_inherit uses a list of model identifiers instead of a string with one model identifier.
+In fact, _inherit can have both forms. Using the list form allows us to inherit from
+multiple (usually Abstract) classes. In this case, we are inheriting just one, so a text
+string would be fine. A list was used instead, for illustration purposes.

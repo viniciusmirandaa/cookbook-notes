@@ -1,0 +1,10 @@
+When writing a new method, if you don't use any decorator, then the method is executed
+on a recordset. In such methods, self is a recordset that can refer to an arbitrary number
+of database records (this includes empty recordsets), and the code will often loop over the
+records in self to do something on each individual record.
+
+The @api.model decorator is similar, but it's used on methods for which only the model
+is important, not the contents of the recordset, which is not acted upon by the method.
+The concept is similar to Python's @classmethod decorator.
+
+
