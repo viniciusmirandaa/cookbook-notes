@@ -1,0 +1,27 @@
+@api.model
+def _name_search(self, name='', args=None,operator='ilike',limit=100, name_get_uid=None):
+	args = [] if args is None else args.copy()
+	if not(name == '' and operator == 'ilike'):
+	args += ['|', '|',
+	('name', operator, name),
+	('isbn', operator, name),
+	('author_ids.name', operator, name)
+	]
+	return super(LibraryBook, self)._name_search(name=name, args=args, operator=operator,
+limit=limit, name_get_uid=name_get_uid)
+
+The default implementation of name_search() actually only calls the _name_
+search() method, which does the real job. This _name_search() method has an
+additional argument, name_get_uid, which is used in some corner cases such as if you
+want to compute the results using sudo() or with a different user.
+
+We pass most of the arguments that we receive unchanged to the super()
+implementation of the method:
+
+	• name is a string that contains the value the user has typed so far.
+	• args is either None or a search domain that's used as a prefilter for the possible
+records. (It can come from the domain parameter of the Many2one relation, for instance.)
+	• operator is a string containing the match operator. Generally, you will have 'ilike' or '='.
+	• limit is the maximum number of rows to retrieve.
+	• name_get_uid can be used to specify a different user when calling name_get()
+to compute the strings to display in the widget.

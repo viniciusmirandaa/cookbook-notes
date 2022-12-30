@@ -1,0 +1,36 @@
+    def avg_retail_price_per_category(self):
+        grouped_result = self.read_group(
+            [('retail_price', "!=", False)], # domain
+            ['categ_id', 'retail_price:avg'], # fields to access
+            ['categ_id'] # group_by
+        )
+        return grouped_result
+        
+        
+The read_group() method internally uses the SQL groupby and aggregate
+functions to fetch the data. The most common arguments that are passed to the
+read_group() method are as follows:
+
+	• domain: This is used to filter records for grouping. For more information on the
+domain, refer to the Searching views recipe in Chapter 9, Backend Views.
+	• fields: This passes the names of fields you want to fetch with the grouped data.
+	Possible values for this argument are as follows:
+	
+	field name: You can pass the field name into the fields argument, but if you
+are using this option, then you must pass this field name to the groupby parameter
+too, otherwise it will generate an error.
+	field_name:agg: You can pass the field name with the aggregate function.
+	For example, in cost_price:avg, avg is a SQL aggregate function.
+	name:agg(field_name): This is the same as the previous one, but, with
+this syntax, you can provide column aliases, such as average_price:avg(cost_price).
+	• groupby: This argument accepts a list of field descriptions. Records will be
+grouped based on these fields. For the date and datetime column, you can pass
+groupby_function to apply date groupings based on different time durations,
+such as date_release:month. This will apply groupings based on months.
+	• read_group() also supports some optional arguments, as follows:
+	offset: This indicates an optional number of records to skip.
+	limit: This indicates an optional maximum number of records to return.
+	orderby: If this option is passed, the result will be sorted based on the given fields.
+	lazy: This accepts Boolean values and, by default, is True. If True is passed, the
+	results are only grouped by the first groupby and the remaining groupby are put
+	in the __context key. If False, all groupby function are done in one call.
