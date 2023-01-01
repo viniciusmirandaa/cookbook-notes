@@ -1,0 +1,48 @@
+filtered:
+
+In some cases, you already have a recordset, but only you need to operate on certain
+records. You can, of course, iterate on the recordset, checking for the condition on each
+iteration and acting depending on the result of the check. It can be easier, and in some
+cases, more efficient, to construct a new recordset containing only the interesting records
+and calling a single operation on that recordset.
+This recipe shows you how to use the filter() method to extract a subset of recordsets
+based on a condition.
+
+
+
+all_books.filter(lambda lm: len(lm.author_ids) > 1)
+all_books.filter('field')
+
+
+
+
+mapped:
+
+When working with a recordset with a length of 1, various fields are available as record
+attributes. Relational attributes (One2many, Many2one, and Many2many) are also
+available with values that are recordsets, too. As an example, let's say we want to access the
+name of the category from the recordset of the library.book model. You can access
+the category name by traversing through the Many2one field's category_id as follows:
+book.category_id.name. However, when working with recordsets with more than
+one record, the attributes cannot be used.
+
+books.mapped('field') 
+
+The mapped() method has two useful properties:
+• If the path is a single scalar field name, then the returned list is in the same order as
+the processed recordset.
+• If the path contains a relational field, then the order is not preserved, but duplicates
+are removed from the result.
+
+This second property is very useful when you want to perform an operation on
+all the records that are pointed to by a Many2many field for all the records in
+self, but you need to ensure that the action is performed only once (even if
+two records of self share the same target record).
+
+
+
+sorted:
+
+books.sorted(key=field) # It will return a record set ordered by the field specified
+books.sorted(key=field, reverse=True) # It will return in reverse order
+
