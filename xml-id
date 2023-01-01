@@ -1,0 +1,12 @@
+	An XML ID is a string that refers to a record in the database. The IDs themselves are
+records of the ir.model.data model. This model contains the data such as the module
+name that declares the XML ID, the ID string, the referred model, and the referred ID.
+
+	Every time we use an XML ID on a <record> tag, Odoo checks whether the string is
+namespaced (that is, whether it contains exactly one dot), and, if not, it adds the current
+module name as a namespace. Then, it looks up whether there is already a record in
+ir.model.data with the specified name. If so, an UPDATE statement for the listed
+fields is executed; if not, a CREATE statement is executed. This is how you can provide
+partial data when a record already exists, as we did earlier.
+
+
