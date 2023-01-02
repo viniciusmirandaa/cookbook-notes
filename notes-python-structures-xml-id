@@ -1,0 +1,10 @@
+python structures:
+
+list: ['', '', ''] homogenea
+tuple: ('', '', '') ou ('',) heterogenea
+set {'', '', ''}
+dict {'':'', '':''}
+
+
+self.env.ref(xml_id) access record by xml_id
+
