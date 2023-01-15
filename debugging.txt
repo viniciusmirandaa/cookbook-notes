@@ -34,8 +34,6 @@ a dialog box with a list of all tours, as shown in the following screenshot. By 
 
 	Regenerate Assets Bundles: Odoo manages all CSS and JavaScript through asset bundles. This option deletes the old JavaScript and CSS assets and generates new ones. This option is helpful when you are getting issues because of asset caching. We will learn more about asset bundles in Chapter 14, CMS Website Development.
 
-	Become Super User: This is a new option added from version 12. By activating this option, you switch to a super user. You can access the records even if you don't have access rights. This option is not available for all users; it is only available for users who have Administration: settings access rights. After activating this mode, you will see a striped top menu.
-
 	
 
 
