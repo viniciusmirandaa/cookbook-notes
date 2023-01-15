@@ -1,0 +1,11 @@
+rent_as_superuser = self.env['library.book.rent'].sudo()
+
+	In the first three steps, we have added new method called book_rent(). This method will be called when the user clicks on the Rent this book button on the book form view.
+
+	In step 4, we used sudo(). This method returns a new recordset with a modified environment in which the user has superuser rights. When recordset is called with sudo(), the environment will modify the environment attribute to su, which indicates the superuser state of the environment. You can access its status via recordset.env.su. All method calls through this sudo recordset are made with superuser privileges. To get a better idea of this, remove .sudo() from the method and then click on the Rent this book button. It will raise Access Error and the user will no longer have access to the model. Simply using sudo() will bypass all security rules.
+
+	Using sudo(), you can bypass the access rights and security record rules. Sometimes you can access multiple records that are meant to be isolated, such as records from different companies in multi-company environments. The sudo() recordset bypasses all the security rules of Odoo.
+	If you are not careful, records searched in this environment may be linked to any company present in the database, which means that you may be leaking information to a user; worse, you may be silently corrupting the database by linking records that belong to different companies.
+
+Important tip
+When using sudo(), always double-check to ensure that your calls to search() do not rely on the standard record rules to filter the results.
