@@ -1,0 +1,42 @@
+	Run JS Mobile Tests: Similar to the preceding option, but this one runs a QUnit test case for a mobile environment.
+
+	Run Click Anywhere Tests: This option will start clicking on all menus one by one. It will click in all the views and search filters. If something is broken or there is any regression, it will show the tracebacks. To stop this test, you will need to reload
+the page.
+
+	Open View: This option will open a list of all available views. By selecting any of them, you can open that view without defining any menus or actions.
+
+	Disable Tours: Odoo uses tours to improve the onboarding of new users. If you want to disable it, you can do it by using this option.
+
+	Start Tour: Odoo also uses tours for automated testing. We will create a custom onboarding tour in Chapter 15, Web Client Development. This option will open
+a dialog box with a list of all tours, as shown in the following screenshot. By clicking on the play button next to a tour, Odoo will automatically perform all the steps of the tour.
+
+	Edit Action: In the Adding menu items and views recipe of Chapter 3, Creating Odoo Add-On Modules, we added a menu item and an action to open views in Odoo. Details of these actions are also stored in the database as a record. This option will open the record details of the action we open to display the current view.
+
+	View Fields: This option will help you when you want to see the details of fields from the user interface. It will show a list of fields for the current model. For example, if you open a tree or form view for a library.book model, this option will show a list of fields for the library.book model.
+
+	Manage Filters: In Odoo, users can create custom filters from the search view. This option will open a list of custom filters for the current model. Here, you can modify the custom filters.
+
+	Technical Translations: This option will open a list of translated terms for the current model. You can modify the technical translation terms for your model from here. You can refer to Chapter 11, Internationalization, to learn more about translations.
+
+	View Access Rights: This option will show a list of security access rights for the current model.
+
+	View Record Rules: This option will show a list of security record rules for the current model.
+
+	Fields View Get: You can extend and modify an existing view from other add-on modules. In some applications, these views are inherited by several add-on modules. Because of this, it is very difficult to get a clear idea of the whole view definition. With this option, you will get the final view definition after applying all view inheritances. Internally, it uses the fields_view_get() method.
+
+	Edit View: <view type>: This option will open the dialog with the ir.ui.view record of the current view. This option is dynamic and it will show an option based on the view that is currently open. This means that if you open Kanban View, you will get an Edit View: Kanban option, and if you open Form View, you will get an Edit View: Form option.
+
+	Edit ControlPanelView: This option is the same as the preceding one, but it will open the ir.ui.view record of the current model's search view.
+
+	Activate Assets Debugging: Odoo provides two types of developer mode: Developer mode and Developer mode with assets. With this option, you can switch from Developer mode to Developer mode with assets mode. Check the Activating the Odoo developer tools recipe in Chapter 1, Installing the Odoo Development Environment, for more details.
+
+	Activate Test Assets Debugging: As we know, Odoo uses tours for testing. Enabling this mode will load test assets in Odoo. This option will show some more tours in the Start tour dialog.
+
+	Regenerate Assets Bundles: Odoo manages all CSS and JavaScript through asset bundles. This option deletes the old JavaScript and CSS assets and generates new ones. This option is helpful when you are getting issues because of asset caching. We will learn more about asset bundles in Chapter 14, CMS Website Development.
+
+	Become Super User: This is a new option added from version 12. By activating this option, you switch to a super user. You can access the records even if you don't have access rights. This option is not available for all users; it is only available for users who have Administration: settings access rights. After activating this mode, you will see a striped top menu.
+
+	
+
+
+	
