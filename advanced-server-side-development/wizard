@@ -1,0 +1,6 @@
+	It is no different from other models, apart from the base class, which is TransientModel instead of Model. Both TransientModel and Model share a common base class, called BaseModel, and if you check the source code of Odoo, you will see that 99% of the work is in BaseModel, and that both Model and TransientModel are almost empty.
+
+	The only things that change for the TransientModel records are as follows:
+	• Records are periodically removed from the database so that the tables for transient
+models do not grow over time.
+	• You are not allowed to define one2many fields on a TransientModel instance that refers to a normal model as this will add a column on the persistent model that links to transient data. Use many2many relations in this case. You can, of course, use one2many fields if the related model in one2many is also TransientModel.

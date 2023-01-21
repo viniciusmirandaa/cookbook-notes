@@ -1,0 +1,31 @@
+	Most of the time, you can perform the operations you want by using Odoo's ORM. For example, you can use the search() method to fetch records. However, sometimes, you need more; either you cannot express what you want using the domain syntax (for which some operations are tricky, if not downright impossible) or your query requires several calls to search(), which ends up being inefficient.
+
+	Starting from, Odoo v13 ORM uses cache excessively. The ORM uses one global cache per transaction. So, it might be possible that records in the database and records in the ORM cache have different data. Using the flush() method before the executing query will make sure all the changes in the cache are pushed to the database.
+
+	Calls the execute() method on the database cursor stored in self.env.cr. This sends the query to PostgreSQL and executes it.
+
+	fetchall() method of the cursor to retrieve a list of rows selected
+by the query. This method returns a list of rows. In my case, this is [('Odoo 12 Development Cookbook', 33), ('PostgreSQL 10 Administration Cookbook', 81)]. From the form of the query we execute, we know that each row will have exactly two values, the first being name and the other being the average number of days a user holds a particular book.
+
+	If you are executing an UPDATE query, you need to manually invalidate the cache, because Odoo ORM's cache is unaware of the changes you made with the UPDATE query. To invalidate the cache, you can use self. invalidate_cache().
+
+	The object in self.env.cr is a thin wrapper around a psycopg2 cursor. The following methods are the ones that you will want to use most of the time:
+
+	 execute(query, params): This executes the SQL query with the parameters marked as %s in the query substituted with the values in params, which is a tuple.
+	Warning
+	Never do the substitution yourself; always use formatting options such as %s, because if you use a technique such as string concatenation, it can make the code vulnerable to SQL injection.
+
+	fetchone(): This returns one row from the database, wrapped in a tuple (even if there is only one column selected by the query).
+
+ 	fetchall(): This returns all the rows from the database as a list of tuples.
+
+	dictfetchall(): This returns all the rows from the database as a list of
+dictionaries mapping column names to values.
+
+	Be very careful when dealing with raw SQL queries:
+
+ 	You are bypassing all the security of the application. Ensure that you call search([('id', 'in', tuple(ids)]) with any list of IDs you are retrieving to filter out records to which the user has no access.
+
+ 	Any modifications you are making are bypassing the constraints set by the add-on modules, except the NOT NULL, UNIQUE, and FOREIGN KEY constraints, which are enforced at the database level. This is also the case for any computed field recomputation triggers, so you may end up corrupting the database.
+
+ 	Avoid the INSERT/UPDATE query, because inserting or updating records via queries will not run any business logic written by overriding the create() and write() methods. It will not update stored compute fields and the ORM constraints will be bypassed too.
