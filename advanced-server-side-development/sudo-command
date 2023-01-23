@@ -9,3 +9,5 @@ rent_as_superuser = self.env['library.book.rent'].sudo()
 
 Important tip
 When using sudo(), always double-check to ensure that your calls to search() do not rely on the standard record rules to filter the results.
+
+note: it is useful when 
