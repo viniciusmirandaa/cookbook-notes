@@ -1,0 +1,16 @@
+	The basic use of onchange methods is to compute new values for fields when some other fields are changed in the user interface, as we have seen in the recipe.
+
+	Inside the body of the method, you get access to the fields displayed in the current view of the record, but not necessarily all the fields of the model. This is because onchange methods can be called while the record is being created in the user interface before it is stored in the database! 	Inside an onchange method, self is in a special state, denoted by the fact that self.id is not an integer, but an instance of odoo.models.NewId. Therefore, you must not make any changes to the database in an onchange method, because the user may end up canceling the creation of the record, which will not roll back any changes made by the onchange method during the process of editing.
+
+	Additionally, onchange methods can return a Python dictionary. This dictionary can have the following keys:
+	• warning: The value must be another dictionary with the title and message keys containing the title and the content of a dialog box, respectively, which will be displayed when the onchange method is run. This is useful for drawing the attention of the user to inconsistencies or to potential problems.
+	• domain: The value must be another dictionary that maps field names to domains. This is useful when you want to change the domain of a one2many field, depending on the value of another field.
+	For instance, suppose that we have a fixed value set for expected_return_date in our library.book.rent model, and we want to display a warning when a member has some books that are late. We also want to restrict the choice of books to the ones currently borrowed by the user. We can rewrite the onchange method, as follows:
+
+
+@api.onchange('member_id')def onchange_member(self):    rentModel = self.env['library.book.rent']
+    books_on_rent = rentModel.search(
+    [('state', '=', 'ongoing'),
+     ('borrower_id', '=', self.borrower_id.id)]
+    )
+    self.book_ids = books_on_rent.mapped('book_id')    result = {         'domain': {'book_ids': {         ('id', 'in', self.book_ids.ids)]         }    }    late_domain = [    ('id', 'in', books_on_rent.ids),    ('expected_return_date', '<', fields.Date.today())    ]    late_books = loans.search(late_domain)    if late_books:        message = ('Warn the member that the following '        'books are late:\n')        titles = late_books.mapped('book_id.name')        result['warning'] = {            'title': 'Late books',            'message': message + '\n'.join(titles)        }    return result
