@@ -1,0 +1,34 @@
+	The onchange method has a limitation: it will not be invoked when you are performing operations on the server side. onchange is invoked automatically only when the dependent operations are performed through the Odoo user interface. Yet, in a number of cases, it is important that these onchange methods are called, because they update important fields in the created or updated record. Of course, you can do the required computation yourself, but this is not always possible, as the onchange method can be added or modified by a third-party add-on module installed on the instance that you don't know about.
+
+	In the Changing the user that performs an action recipe, we added a Rent this book button so non-librarian users can borrow books by themselves. We now want to do the same for returning the books, but instead of writing the logic for returning the book, we will just use the book return wizard that we created in the Defining onchange methods recipe.
+
+	In this recipe, we will manually create a record of the library.return.wizard model. We want the onchange method to compute the returned books for us. To do this, you need to perform the following steps:
+
+	1. Import Form from the tests utility in the library_book.py file: 
+
+	from odoo.tests.common import Form
+
+
+	2. Create the return_this_books method in the library.book model:
+
+	3. Get an empty recordset for library.return.wizard: wizard = self.env['library.return.wizard']
+
+	4. Create wizard Form block like this:
+		with Form(wizard) as return_form:
+
+	5. Trigger onchange by assigning a borrower and then return the books:		def return_all_books(self):		    self.ensure_one()  		    id
+		    return_form.borrower_id = self.env.user.partner_	      	    record = return_form.save()		    record.books_returns()
+
+
+def return_all_books(self):	self.ensure_one()
+	wizard = self.env['library.return.wizard']
+	with Form(wizard) as return_form:
+	     return_form.borrower_id = self.partner_id.id	     record = return_form.save()	     record.books_returns()
+
+	Step 4 creates a virtual form to handle onchange specifications, such as the GUI. 
+
+	Step 5 contains the full logic to return all books. In the first line, we have assigned borrower_id in the wizard. This will trigger the onchange method defined in the library.return.wizard model. The onchange method will assign the books in the many2many field book_ids (to learn more about the onchange method, refer to the onchange method definition in the previous recipe). Then, we call the save() method of the form, which will return a wizard record. After that, we call the books_returns() method to execute the logic to return all books.
+		
+	The onchange method is mostly invoked from the user interface. But in this recipe, we have learned how you can use/trigger the business logic of the onchange method on the server side. This way, you can create records without bypassing any business logic.
+	
+	
