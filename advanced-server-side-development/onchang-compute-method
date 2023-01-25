@@ -1,0 +1,30 @@
+	In , we have seen how to define and call the onchange method. We have also seen its limitation, which is that it can be invoked automatically only from the user interface. As a solution to this problem, Odoo v13 introduced a new way to define onchange behavior. In this recipe, we will see how you can use the compute method to produce behavior like the onchange method's.			For this recipe, we will use the my_library module from the previous recipe. We will replace the onchange method of library.return.wizard with the compute method.
+
+Replace api.onchange in the onchange_member() method with compute like this:
+	@api.depends('borrower_id')
+		def onchange_member(self):
+		...
+
+Add the compute parameter in the definition of the field like this:
+	book_ids = fields.Many2many('library.book',
+       string='Books',
+       compute="onchange_member",
+       readonly=False)
+
+Functionally, our computed onchange works like the normal onchange method. The only difference is now onchange will be trigged upon backend changes too.
+
+	In step 1, we replaced @api.onchange with @api.compute. This is required to recompute the method when the field value changes.
+
+	In step 2, we registered the compute method with the field. If you notice, we have used readonly=False with the compute field definition. By default, compute methods are read-only, but by setting readonly=False, we are making sure that the field is editable and stored.
+
+	As computed onchange works in the backend too, we no longer need to use the Form class in the return_all_books() method. You can replace the code as follows:
+	
+	def return_all_books(self):
+    		self.ensure_one()
+    		wizard = self.env['library.return.wizard']
+
+		wizard.create({
+  			'borrower_id': self.env.user.partner_id.id
+		}).books_returns()
+
+	This code will return all the rented books of a user without using the Form class. With the normal onchange method, you need to create the Form object, but with computed onchange, you no longer need to create a Form object. The correct onchange method will be called when a record is created.
