@@ -1,0 +1,5 @@
+	The context is part of the environment of a recordset. It is used to pass extra information such as the time zone and the language of the user from the user interface. You can also use the context to pass the parameters specified in the actions. A number of methods in the standard Odoo add-ons use the context to adapt their business logic based on these context values. It is sometimes necessary to modify the context on a recordset to get the desired results from a method call or the desired value for a computed field.
+	This recipe will show how to change the behavior of a method based on values in the environmental context.
+
+book_with_different_context = self.book_id.with_context(avoid_deactivate=True)
+book_with_different_context.sudo().make_lost()
