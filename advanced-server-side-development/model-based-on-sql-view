@@ -1,0 +1,55 @@
+	When working on the design of an add-on module, we model the data in classes that
+are then mapped to database tables by Odoo's ORM. We apply some well-known design principles, such as separation of concerns and data normalization. However, at later stages of the module design, it can be useful to aggregate data from several models in a single table, and to maybe perform some operations on them on the way, especially for reporting or producing dashboards. To make this easier, and to make use of the full power of the underlying PostgreSQL database engine in Odoo, it is possible to define a read-only model backed by a PostgreSQL view, rather than a table.
+
+1. Create a new model with the _auto class attribute set to False:
+	class LibraryBookRentStatistics(models.Model):
+    		_name = 'library.book.rent.statistics'
+    		_auto = False
+
+
+2. Declare the fields you want to see in the model, setting them as readonly:
+
+	book_id = fields.Many2one(
+		'library.book',
+        	string='Book',
+        	readonly=True
+	)
+
+        rent_count = fields.Integer(
+        	string="Times borrowed",
+        	readonly=True
+	)
+
+        average_occupation = fields.Integer(
+               string="Average Occupation (DAYS)",
+               readonly=True
+	)
+
+3. Define the init() method to create the view:
+
+def init(self):
+        tools.drop_view_if_exists(self.env.cr, self._
+table)
+        query = """
+        CREATE OR REPLACE VIEW library_book_rent_
+statistics AS (
+        SELECT
+                min(lbr.id) as id,
+                lbr.book_id as book_id,
+                count(lbr.id) as rent_count,
+                avg((EXTRACT(epoch from age(return_date,
+rent_date)) / 86400))::int as average_occupation
+            FROM
+                library_book_rent AS lbr
+            JOIN
+                library_book as lb ON lb.id = lbr.book_id
+            WHERE lbr.state = 'returned'
+            GROUP BY lbr.book_id
+        );
+        """
+        self.env.cr.execute(query)
+
+	Normally, Odoo will create a new table for the model you are defining by using the field definitions for the columns. This is because in the BaseModel class, the _auto attribute defaults to True. In step 1, by positioning this class attribute to False, we tell Odoo that we will manage this by ourselves.
+	In step 2, we define some fields that will be used by Odoo to generate a table. We take care to flag them as readonly=True, so that the views do not enable modifications that you will not be able to save, since PostgreSQL views are read-only.
+	Step 3 defines the init() method. This method normally does nothing; it is called after _auto_init() (which is responsible for the table creation when _auto = True, but does nothing otherwise), and we use it to create a new SQL view (or to update the existing view in the case of a module upgrade). The view creation query must create a view with column names that match the field names of the model.
+
