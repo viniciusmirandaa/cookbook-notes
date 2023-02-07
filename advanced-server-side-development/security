@@ -1,0 +1,3 @@
+	In Odoo, all settings options are added in the res.config.settings model. res. config.settings is a transient model. In step 1, we created a new security group. We will use this group to create the hide and show buttons.
+
+	In step 2, we added a new Boolean field in the res.config.settings model by inheriting it. We added an implied_group attribute with the value of my_library. group_self_borrow. This group will be assigned to all odoo users when the admin enables or disables options with the Boolean field.
