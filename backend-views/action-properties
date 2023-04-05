@@ -1,0 +1,16 @@
+	The first XML element, act_window, declares a window action to display a list view with all the customers. We used the most important attributes:
+	• name: To be used as the title for views opened by the action.
+	• res_model: This is the model to be used. We are using res.partner, where
+Odoo stores all the partners and addresses, including customers.
+	• view_mode: This lists the view types to make available. It is a comma-separated values file of the views type. The default value is tree, form, which makes list and form views available. If you just want to show calendar and form views, then the value of view_mode should be calendar, form. Other possible view choices are kanban, graph, pivot, calendar, cohort, and dashboard. You will learn more about these views in forthcoming recipes.
+	• domain: This is optional and allows you to set a filter on the records to be made available in the views. In this case, we want to limit the partners to only those who are customers. We will see all of these views in more detail in the Defining filters on record lists – Domain recipe of this chapter.
+	• context: This can set values made available to the opened views, affecting their behavior. In our example, on new records, we want the customer rank's default value to be 1. This will be covered in more depth in the Passing parameters to forms and actions – Context recipe of this chapter.
+	• limit: This sets the default amount of records that can be seen on list views. In our example, we have given a limit of 20, but if you don't give a limit value, Odoo will use the default value of 80.
+	
+	Window actions also support a target attribute to specify how the view is to be presented. The possible choices are as follows:
+	• current: This is the default and opens the view in the web client main content area.
+	• new: This opens the view in a popup.
+	• inline: Like current but opens a form in edit mode and disables the Action menu.
+	• fullscreen: The action will cover the whole browser window, so this will overlay the menus too. Sometimes, this is called tablet mode.
+	• main: Like current, but also clears out the breadcrumbs.
+

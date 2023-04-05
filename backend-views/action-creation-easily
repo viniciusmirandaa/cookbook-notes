@@ -1,0 +1,8 @@
+<act_window
+    id="action_all_customers"
+    name="All customers"
+    res_model="res.partner"
+    view_mode="tree,form"
+    domain="[('customer_rank', '>', 0)]"
+    context="{'default_customer_rank': 1}"
+    limit="20"/>
